@@ -10,8 +10,6 @@ import java.util.List;
 public class RequestOrder {
 
     private List<Long> orderItems;
-    private int quantity;
-    private Long sellerId;
-    private Long buyerId;
+    private String status;
 
 }

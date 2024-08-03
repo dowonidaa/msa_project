@@ -15,4 +15,6 @@ public interface ProductClient {
     @GetMapping("/products/{id}")
     ResponseEntity<ResponseProduct> getProductById(@PathVariable("id") Long productId);
 
+    @GetMapping("/products/{id}/reduceQuantity")
+    void reduceQuantity(Long productId, int quantity);
 }

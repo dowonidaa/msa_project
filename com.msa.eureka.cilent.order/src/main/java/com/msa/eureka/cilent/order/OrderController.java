@@ -23,8 +23,30 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<?> addOrder(@RequestBody RequestOrder request) {
-        orderService.addOrder(request);
+    public ResponseEntity<?> createOrder(@RequestBody RequestOrder request,
+                                         @RequestHeader("X-User_Id")Long userId) {
+        orderService.createOrder(request, userId);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{orderId}")
+    public ResponseEntity<?> getOrder(@PathVariable Long orderId,
+                                      @RequestHeader("X-User_Id")Long userId) {
+        ResponseOrder responseOrder = orderService.getOrder(orderId, userId);
+        return ResponseEntity.ok(responseOrder);
+    }
+
+    @PutMapping("/{orderId}")
+    public ResponseEntity<ResponseOrder> updateOrder(@PathVariable Long orderId,
+                                                     @RequestBody RequestOrder request,
+                                                     @RequestHeader("X-User_Id") Long userId) {
+        ResponseOrder responseOrder = orderService.updateOrder(orderId, request, userId);
+        return ResponseEntity.ok(responseOrder);
+    }
+
+    @DeleteMapping("/{orderId}")
+    public ResponseEntity<?> deleteOrder(@PathVariable Long orderId) {
+        orderService.deleteOrder(orderId);
         return ResponseEntity.ok().build();
     }
 
