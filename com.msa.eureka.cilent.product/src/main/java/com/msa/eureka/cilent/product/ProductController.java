@@ -1,9 +1,8 @@
 package com.msa.eureka.cilent.product;
 
-import jakarta.persistence.EntityNotFoundException;
+import com.msa.eureka.cilent.product.dto.RequestProduct;
+import com.msa.eureka.cilent.product.dto.ResponseProduct;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

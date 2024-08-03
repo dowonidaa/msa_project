@@ -1,4 +1,4 @@
-package com.msa.eureka.cilent.product;
+package com.msa.eureka.cilent.product.dto;
 
 import lombok.Getter;
 import lombok.Setter;

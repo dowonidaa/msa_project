@@ -1,5 +1,7 @@
 package com.msa.eureka.cilent.product;
 
+import com.msa.eureka.cilent.product.dto.RequestProduct;
+import com.msa.eureka.cilent.product.dto.ResponseProduct;
 import com.msa.eureka.cilent.product.entity.Product;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
