@@ -1,4 +1,4 @@
-package com.msa.eureka.cilent.product;
+package com.msa.eureka.cilent.product.dto;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class RequestProduct {
 
-    private Long id;
+    private String description;
     private String productName;
     private long productPrice;
     private int productQuantity;
