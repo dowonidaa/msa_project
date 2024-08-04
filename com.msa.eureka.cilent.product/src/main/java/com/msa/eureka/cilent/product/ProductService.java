@@ -67,13 +67,13 @@ public class ProductService {
     }
 
 
+    @Transactional
     public void reduceQuantity(Long productId, int quantity) {
         Product product = findById(productId);
-        if (product.getQuantity() < 1) {
+        if (product.getQuantity() < quantity) {
             throw new IllegalArgumentException("상품: " + productId + " 수량이 0 입니다. ");
         }
         product.reduceQuantity(quantity);
-
     }
 
     private Product findById(Long productId) {
