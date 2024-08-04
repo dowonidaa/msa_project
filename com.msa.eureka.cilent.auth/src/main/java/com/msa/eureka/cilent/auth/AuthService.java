@@ -86,4 +86,9 @@ public class AuthService {
                 .signWith(secretKey)
                 .compact();
     }
+
+    public Boolean validated(Long userId, String role) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("유저 아이디를 찾을 수 없습니다."));
+        return user.getRole().name().equals(role);
+    }
 }
