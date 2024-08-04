@@ -25,4 +25,9 @@ public class AuthController {
         String token = authService.signIn(requestSignIn);
         return ResponseEntity.ok(new ResponseSignIn(token));
     }
+
+    @GetMapping("/validated")
+    public Boolean validated(@RequestHeader("X-User_Id") Long userId, @RequestHeader("X-Role") String role) {
+        return authService.validated(userId, role);
+    }
 }
