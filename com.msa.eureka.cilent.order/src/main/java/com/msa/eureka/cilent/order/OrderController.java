@@ -2,8 +2,11 @@ package com.msa.eureka.cilent.order;
 
 import com.msa.eureka.cilent.order.dto.RequestOrder;
 import com.msa.eureka.cilent.order.dto.ResponseOrder;
+import com.msa.eureka.cilent.order.dto.SearchOrder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,8 +22,10 @@ public class OrderController {
     private final OrderService orderService;
 
     @GetMapping
-    public ResponseEntity<List<ResponseOrder>> getOrders() {
-        List<ResponseOrder> orders = orderService.getOrders();
+    public ResponseEntity<Page<ResponseOrder>> getOrders(SearchOrder searchOrder, Pageable pageable,
+                                                         @RequestHeader("X-User-Id")String username,
+                                                         @RequestHeader("X-Role")String role) {
+        Page<ResponseOrder> orders = orderService.getOrders(searchOrder,pageable, username, role);
         return ResponseEntity.ok(orders);
     }
 
@@ -28,8 +33,8 @@ public class OrderController {
     public ResponseEntity<?> createOrder(@RequestBody RequestOrder request,
                                          @RequestHeader("X-User-Id")String username) {
         log.info("request = {}", request.getOrderItems());
-        orderService.createOrder(request, username);
-        return ResponseEntity.ok().build();
+        ResponseOrder order = orderService.createOrder(request, username);
+        return ResponseEntity.ok(order);
     }
 
     @GetMapping("/{orderId}")

@@ -4,9 +4,12 @@ import com.msa.eureka.cilent.order.client.ProductClient;
 import com.msa.eureka.cilent.order.client.ResponseProduct;
 import com.msa.eureka.cilent.order.dto.RequestOrder;
 import com.msa.eureka.cilent.order.dto.ResponseOrder;
+import com.msa.eureka.cilent.order.dto.SearchOrder;
 import com.msa.eureka.cilent.order.entity.Order;
 import com.msa.eureka.cilent.order.entity.OrderStatus;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,15 +23,15 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final ProductClient productClient;
+    private final OrderSearchRepository orderSearchRepository;
 
-    public List<ResponseOrder> getOrders() {
-        List<Order> orders = orderRepository.findAll();
-        return orderToResponseOrder(orders);
+    public Page<ResponseOrder> getOrders(SearchOrder searchOrder, Pageable pageable, String username, String role) {
+        return orderSearchRepository.searchOrders(searchOrder,pageable, username, role);
 
     }
 
     @Transactional
-    public void createOrder(RequestOrder request, String username) {
+    public ResponseOrder createOrder(RequestOrder request, String username) {
         for (Long productId : request.getOrderItems()) {
             ResponseProduct product = productClient.getProductById(productId).getBody();
 
@@ -41,6 +44,7 @@ public class OrderService {
         }
         Order order = new Order(request.getOrderItems(), OrderStatus.CREATED, username);
         orderRepository.save(order);
+        return new ResponseOrder(order);
     }
 
 
