@@ -18,11 +18,10 @@ public class AuthConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                .formLogin(AbstractHttpConfigurer::disable)
-                .httpBasic(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests( auth ->auth
+                .authorizeRequests( auth ->auth
                         .requestMatchers("/auth/signIn").permitAll()
                         .requestMatchers("/auth/signUp").permitAll()
+                        .requestMatchers("/auth/validated").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session

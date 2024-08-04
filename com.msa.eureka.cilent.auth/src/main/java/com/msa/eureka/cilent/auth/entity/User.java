@@ -30,14 +30,11 @@ public class User extends BaseEntity{
     private UserRole role;
 
 
-    public User(RequestSignUp request) {
-        this.username = request.getUsername();
-        this.password = request.getPassword();
-        this.email = request.getEmail();
-        this.role = request.getRole();
-    }
 
-    public User(String username, String password, String email, UserRole role) {
-        super();
+    public User(String username, String password, String email, String role) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.role = UserRole.valueOf(role);
     }
 }

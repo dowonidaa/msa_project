@@ -30,25 +30,25 @@ public class Order extends BaseEntity{
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
-    private Long createBy;
-    private Long updaterBy;
+    private String createBy;
+    private String updaterBy;
 
     @Column(nullable = false)
     private Boolean isDelete = false;
 
-    public Order(List<Long> orderItems, OrderStatus status, Long userId) {
+    public Order(List<Long> orderItems, OrderStatus status, String username) {
         this.orderItems = orderItems;
         this.status = status;
-        this.createBy = userId;
+        this.createBy = username;
     }
 
     public void delete(Boolean isDelete) {
         this.isDelete = isDelete;
     }
 
-    public void update(RequestOrder request, Long userId) {
+    public void update(RequestOrder request, String username) {
         this.orderItems = request.getOrderItems();
         this.status = OrderStatus.valueOf(request.getStatus());
-        this.updaterBy = userId;
+        this.updaterBy = username;
     }
 }

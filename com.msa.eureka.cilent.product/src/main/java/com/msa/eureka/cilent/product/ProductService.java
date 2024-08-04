@@ -6,6 +6,7 @@ import com.msa.eureka.cilent.product.dto.ResponseProduct;
 import com.msa.eureka.cilent.product.entity.Product;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +16,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j
 public class ProductService {
 
     private final UserClient userClient;
@@ -23,9 +25,9 @@ public class ProductService {
 
 
     @Transactional
-    public void createProduct(RequestProduct request, Long userId, String role) {
+    public void createProduct(RequestProduct request, String username, String role) {
 
-        if (!userClient.validated(userId, role)) {
+        if (!userClient.validated(username, role)) {
             throw new IllegalArgumentException("유저 정보가 일치하지 않습니다.");
         }
 
@@ -37,6 +39,7 @@ public class ProductService {
     }
 
     public ResponseProduct getProductById(Long productId) {
+        log.info("productId = {}",productId);
         Product product = productRepository.findById(productId).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOTFOUND + productId));
         return new ResponseProduct(product);
     }

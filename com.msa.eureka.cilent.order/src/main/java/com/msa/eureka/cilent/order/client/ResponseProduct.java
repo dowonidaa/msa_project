@@ -9,12 +9,12 @@ import java.time.LocalDateTime;
 @Setter
 public class ResponseProduct {
 
-    private Long id;
-    private String name;
-    private String description;
-    private long price;
-    private int quantity;
+    private Long productId;
+    private String productName;
+    private String productDescription;
+    private long productPrice;
+    private int productQuantity;
     private LocalDateTime createAt;
     private LocalDateTime updateAt;
-    private Long buyerId;
+
 }

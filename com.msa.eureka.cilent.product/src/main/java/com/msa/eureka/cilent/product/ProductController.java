@@ -23,9 +23,10 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<?> createProduct(@RequestBody RequestProduct request,
-                                           @RequestHeader("X-User_Id") Long userId,
-                                           @RequestHeader("X-Role")String role) {
-        productService.createProduct(request, userId, role);
+                                           @RequestHeader("X-User-Id") String username,
+                                           @RequestHeader("X-Role")String role,
+                                           @RequestHeader("Authorization")String token) {
+        productService.createProduct(request, username, role);
         return ResponseEntity.ok().build();
     }
 

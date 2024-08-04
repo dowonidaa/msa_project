@@ -28,36 +28,36 @@ public class OrderService {
     }
 
     @Transactional
-    public void createOrder(RequestOrder request, Long userId) {
+    public void createOrder(RequestOrder request, String username) {
         for (Long productId : request.getOrderItems()) {
             ResponseProduct product = productClient.getProductById(productId).getBody();
 
-            if (product.getQuantity() < 1) {
+            if (product.getProductQuantity() < 1) {
                 throw new IllegalArgumentException("상품: " + productId + " 수량이 0 입니다.");
             }
         }
         for (Long productId : request.getOrderItems()) {
             productClient.reduceQuantity(productId, 1);
         }
-        Order order = new Order(request.getOrderItems(), OrderStatus.CREATED, userId);
+        Order order = new Order(request.getOrderItems(), OrderStatus.CREATED, username);
         orderRepository.save(order);
     }
 
 
-    public ResponseOrder getOrder(Long orderId, Long userId) {
+    public ResponseOrder getOrder(Long orderId, String username) {
         Order order = orderRepository.findById(orderId).filter(o -> !o.getIsDelete())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 주문 내역입니다."));
-        if (!order.getCreateBy().equals(userId)){
+        if (!order.getCreateBy().equals(username)){
             throw new IllegalArgumentException("해당 주문에 대한 권한이 없습니다.");
         }
         return new ResponseOrder(order);
     }
 
     @Transactional
-    public ResponseOrder updateOrder(Long orderId, RequestOrder request, Long userId) {
+    public ResponseOrder updateOrder(Long orderId, RequestOrder request, String username) {
         Order order = orderRepository.findById(orderId).filter(o -> !o.getIsDelete())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 주문 내역입니다."));
-        order.update(request, userId);
+        order.update(request, username);
         return new ResponseOrder(order);
     }
 

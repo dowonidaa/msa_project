@@ -38,7 +38,7 @@ public class AuthService {
     }
 
     // 회원 가입
-    public void signUp(RequestSignUp request) {
+    public User signUp(RequestSignUp request) {
         String username = request.getUsername();
         String password = passwordEncoder.encode(request.getPassword());
 
@@ -56,11 +56,12 @@ public class AuthService {
         }
 
         // 사용자 ROLE 확인
-        UserRole role = request.getRole();
+        String role = request.getRole();
 
         // 사용자 등록
         User user = new User(username, password, email, role);
         userRepository.save(user);
+        return user;
     }
 
     public String signIn(RequestSignIn requestSignIn) {
@@ -79,16 +80,16 @@ public class AuthService {
 
     public String createAccessToken(String userId, UserRole role) {
         return Jwts.builder()
-                .claim("user_id", userId)
-                .claim("role", role.getAuthority())
+                .claim("username", userId)
+                .claim("role", role.toString())
                 .issuer(issuer)
                 .expiration(new Date(System.currentTimeMillis() + accessExpiration))
                 .signWith(secretKey)
                 .compact();
     }
 
-    public Boolean validated(Long userId, String role) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("유저 아이디를 찾을 수 없습니다."));
-        return user.getRole().name().equals(role);
+    public Boolean validated(String username, String role) {
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new IllegalArgumentException("유저 아이디를 찾을 수 없습니다."));
+        return user.getRole().toString().equals(role);
     }
 }

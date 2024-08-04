@@ -1,6 +1,6 @@
 spring:
   application:
-    name: auth
+    name: auth-service
 server:
   port: 19095
 
