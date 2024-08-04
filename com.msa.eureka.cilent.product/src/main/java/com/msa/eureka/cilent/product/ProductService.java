@@ -1,5 +1,6 @@
 package com.msa.eureka.cilent.product;
 
+import com.msa.eureka.cilent.product.client.UserClient;
 import com.msa.eureka.cilent.product.dto.RequestProduct;
 import com.msa.eureka.cilent.product.dto.ResponseProduct;
 import com.msa.eureka.cilent.product.entity.Product;
@@ -16,12 +17,21 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class ProductService {
 
+    private final UserClient userClient;
     private final ProductRepository productRepository;
     private final String ENTITY_NOTFOUND = "상픔을 찾지 못했습니다. 상품 id : ";
 
 
     @Transactional
-    public void addProduct(RequestProduct request) {
+    public void createProduct(RequestProduct request, Long userId, String role) {
+
+        if (!userClient.validated(userId, role)) {
+            throw new IllegalArgumentException("유저 정보가 일치하지 않습니다.");
+        }
+
+        if (role.equals("MEMBER")) {
+            throw new IllegalArgumentException("유저 권한이 없습니다.");
+        }
         Product product = new Product(request);
         productRepository.save(product);
     }
@@ -33,7 +43,7 @@ public class ProductService {
 
     @Transactional
     public void update(Long productId, RequestProduct request) {
-        Product product = productRepository.findById(productId).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOTFOUND + productId));
+        Product product = findById(productId);
         try {
             product.update(request);
         } catch (Exception e) {
@@ -44,8 +54,8 @@ public class ProductService {
     @Transactional
     public void delete(Long productId) {
         try {
-            Product product = productRepository.findById(productId).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOTFOUND + productId));
-            productRepository.delete(product);
+            Product product = findById(productId);
+            product.delete(true);
         } catch (Exception e) {
             throw new IllegalArgumentException("삭제 실패");
         }
@@ -55,6 +65,21 @@ public class ProductService {
         List<Product> products = productRepository.findAll();
         return productToResponseProduct(products);
     }
+
+
+    public void reduceQuantity(Long productId, int quantity) {
+        Product product = findById(productId);
+        if (product.getQuantity() < 1) {
+            throw new IllegalArgumentException("상품: " + productId + " 수량이 0 입니다. ");
+        }
+        product.reduceQuantity(quantity);
+
+    }
+
+    private Product findById(Long productId) {
+        return productRepository.findById(productId).filter(p -> !p.getIsDeleted()).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOTFOUND + productId));
+    }
+
 
 
     private List<ResponseProduct> productToResponseProduct(List<Product> products) {
