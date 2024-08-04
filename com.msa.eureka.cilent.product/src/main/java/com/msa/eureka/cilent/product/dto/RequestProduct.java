@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class RequestProduct {
 
-    private Long id;
+    private String description;
     private String productName;
     private long productPrice;
     private int productQuantity;
