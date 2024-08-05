@@ -17,13 +17,12 @@ import java.util.List;
 import static com.msa.eureka.cilent.order.entity.QOrder.order;
 
 
-@Repository
 
-public class OrderSearchRepositoryImpl implements OrderSearchRepository {
+public class OrderRepositoryImpl implements OrderCustomRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    public OrderSearchRepositoryImpl(EntityManager em) {
+    public OrderRepositoryImpl(EntityManager em) {
         this.queryFactory = new JPAQueryFactory(em);
     }
 

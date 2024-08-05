@@ -5,7 +5,7 @@ import com.msa.eureka.cilent.order.dto.SearchOrder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-public interface OrderSearchRepository {
+public interface OrderCustomRepository {
 
     Page<ResponseOrder> searchOrders(SearchOrder searchOrder, Pageable pageable, String username, String role);
 }

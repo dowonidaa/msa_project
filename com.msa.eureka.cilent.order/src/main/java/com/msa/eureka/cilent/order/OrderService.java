@@ -23,11 +23,9 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final ProductClient productClient;
-    private final OrderSearchRepository orderSearchRepository;
 
     public Page<ResponseOrder> getOrders(SearchOrder searchOrder, Pageable pageable, String username, String role) {
-        return orderSearchRepository.searchOrders(searchOrder,pageable, username, role);
-
+        return orderRepository.searchOrders(searchOrder,pageable, username, role);
     }
 
     @Transactional
