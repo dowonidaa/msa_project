@@ -7,6 +7,8 @@ import com.msa.eureka.cilent.product.entity.Product;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -64,9 +66,8 @@ public class ProductService {
         }
     }
 
-    public List<ResponseProduct> getProducts() {
-        List<Product> products = productRepository.findAll();
-        return productToResponseProduct(products);
+    public Page<ResponseProduct> getProducts(Pageable pageable, String username, String role) {
+        return productRepository.searchProduct(pageable, username, role);
     }
 
 

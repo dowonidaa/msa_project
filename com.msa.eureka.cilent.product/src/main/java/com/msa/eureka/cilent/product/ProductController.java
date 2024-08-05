@@ -3,6 +3,8 @@ package com.msa.eureka.cilent.product;
 import com.msa.eureka.cilent.product.dto.RequestProduct;
 import com.msa.eureka.cilent.product.dto.ResponseProduct;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,16 +18,17 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping
-    public ResponseEntity<List<ResponseProduct>> getProducts() {
-        List<ResponseProduct> products = productService.getProducts();
+    public ResponseEntity<Page<ResponseProduct>> getProducts(Pageable pageable,
+                                                             @RequestHeader("X-User-Id") String username,
+                                                             @RequestHeader("X-Role")String role) {
+        Page<ResponseProduct> products = productService.getProducts(pageable, username, role);
         return ResponseEntity.ok(products);
     }
 
     @PostMapping
     public ResponseEntity<?> createProduct(@RequestBody RequestProduct request,
                                            @RequestHeader("X-User-Id") String username,
-                                           @RequestHeader("X-Role")String role,
-                                           @RequestHeader("Authorization")String token) {
+                                           @RequestHeader("X-Role")String role) {
         productService.createProduct(request, username, role);
         return ResponseEntity.ok().build();
     }

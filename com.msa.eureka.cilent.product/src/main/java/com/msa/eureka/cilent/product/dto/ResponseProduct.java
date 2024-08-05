@@ -1,6 +1,7 @@
 package com.msa.eureka.cilent.product.dto;
 
 import com.msa.eureka.cilent.product.entity.Product;
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,7 +19,7 @@ public class ResponseProduct {
     private LocalDateTime createAt;
     private LocalDateTime updateAt;
 
-
+    @QueryProjection
     public ResponseProduct(Product product) {
         this.productId = product.getId();
         this.productName = product.getProductName();
